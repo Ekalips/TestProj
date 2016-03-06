@@ -26,12 +26,17 @@ public class StartActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*").setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent,"Select Picture"), SELECT_PICTURE);
+                OpenImageBrowser();
             }
         });
     }
+
+    private void OpenImageBrowser() {
+        Intent intent = new Intent();
+        intent.setType("image/*").setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent,"Select Picture"), SELECT_PICTURE);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
