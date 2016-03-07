@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,14 +16,15 @@ public class StartActivity extends AppCompatActivity {
     private static final int SELECT_PICTURE = 1;
 
     private String selectedImagePath;
-
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
         Button btn = (Button) findViewById(R.id.GoBtn);
-
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,8 +46,10 @@ public class StartActivity extends AppCompatActivity {
             if (requestCode == SELECT_PICTURE)
             {
                 Uri selectedImageUri = data.getData();
-                selectedImagePath = getPath(selectedImageUri);
-                ((ImageView)findViewById(R.id.imageView)).setImageURI(selectedImageUri);
+               // selectedImagePath = getPath(selectedImageUri);
+                Intent intent = new Intent(this,EditorActivity.class);
+                intent.putExtra("urilol",selectedImageUri.toString());
+                startActivity(intent);
             }
         }
     }
