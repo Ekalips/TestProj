@@ -7,10 +7,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
@@ -24,6 +27,15 @@ public class EditorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_editor);
         ImageView imageView = (ImageView) findViewById(R.id.imageEditView);
         imageView.setImageURI(Uri.parse(getIntent().getStringExtra("urilol")));
+
+        ImageButton imageButton = (ImageButton) findViewById(R.id.menuBtn);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopup(v);
+            }
+        });
+
         attacher = new PhotoViewAttacher(imageView);
         attacher.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
             @Override
@@ -59,5 +71,13 @@ public class EditorActivity extends AppCompatActivity {
 
             }
         });
+
+
+    }
+    public void showPopup(View v) {
+        PopupMenu popup = new PopupMenu(this, v);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.edit_menu, popup.getMenu());
+        popup.show();
     }
 }
