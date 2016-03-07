@@ -18,5 +18,17 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"/>
 
+    <android.support.v7.widget.RecyclerView
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:id="@+id/recyclerView"
+        android:background="#B3000000"
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/menuBtn"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true" />
+
 
 </RelativeLayout>

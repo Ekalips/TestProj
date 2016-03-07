@@ -1,13 +1,18 @@
 package com.example.djqrj.allah;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuInflater;
@@ -15,20 +20,29 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class EditorActivity extends AppCompatActivity {
     private boolean isFullScreen = false;
     PhotoViewAttacher attacher;
+    RecyclerView recyclerView;
+    Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
-        ImageView imageView = (ImageView) findViewById(R.id.imageEditView);
-        imageView.setImageURI(Uri.parse(getIntent().getStringExtra("urilol")));
+        context = this;
+        final ImageView imageView = (ImageView) findViewById(R.id.imageEditView);
+        final Uri uri = Uri.parse(getIntent().getStringExtra("urilol"));
+        imageView.setImageURI(uri);
 
-        ImageButton imageButton = (ImageButton) findViewById(R.id.menuBtn);
+        final ImageButton imageButton = (ImageButton) findViewById(R.id.menuBtn);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -36,41 +50,53 @@ public class EditorActivity extends AppCompatActivity {
             }
         });
 
-        attacher = new PhotoViewAttacher(imageView);
-        attacher.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
-            @Override
-            public void onPhotoTap(View view, float x, float y) {
-                if (!isFullScreen) {
-                    if (Build.VERSION.SDK_INT < 16) {
-                        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                    }
-                    else {
-                        View decorView = getWindow().getDecorView();
-                        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-                        decorView.setSystemUiVisibility(uiOptions);
-                        View decorView2 = getWindow().getDecorView();
-                        int uiOptions2 = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                                | View.SYSTEM_UI_FLAG_FULLSCREEN;
-                        decorView2.setSystemUiVisibility(uiOptions2);
-                    }
-                    isFullScreen = true;
-                }
-                else {
-                    if (Build.VERSION.SDK_INT >= 16)
-                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                    else{
-                        View decorView2 = getWindow().getDecorView();
-                        decorView2.setSystemUiVisibility(
-                                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-                    }
-                    isFullScreen = false;
-                }
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
 
-            }
-        });
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
+        recyclerView.setLayoutManager(layoutManager);
+        String[] array = {"2007","Inv","Brightness","Tint"};
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(array);
+        recyclerView.setAdapter(adapter);
+
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(context, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        TextView textView = (TextView) view.findViewById(R.id.itemText);
+                        Log.d("lele",textView.getText().toString() + "text");
+                        switch (textView.getText().toString())
+                        {
+                            case "2007":
+                            {
+                                Bitmap bitmap = null;
+                                try {
+                                    bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+                                }
+                                catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                PicHentai.doBrightness(bitmap,20);
+                                //imageView.setImageBitmap(PicHentai.doGreyscale(bitmap));
+                                //attacher.update();
+                                break;
+                            }
+                            case "Inv": break;
+                            case "Brightness": break;
+                            case "Tint": break;
+                        }
+                    }
+                })
+        );
+
+
+
+//        attacher = new PhotoViewAttacher(imageView);
+//        attacher.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
+//            @Override
+//            public void onPhotoTap(View view, float x, float y) {
+//
+//            }
+//        });
 
 
     }
