@@ -3,12 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     tools:context="com.example.djqrj.allah.EditorActivity">
-    <ImageView
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:id="@+id/imageEditView"/>
+    <android.opengl.GLSurfaceView
+        android:id="@+id/effectsview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"/>
 
     <ImageButton
         android:layout_width="30dp"
