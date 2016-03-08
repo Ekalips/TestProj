@@ -62,7 +62,7 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
         mEffectView.setEGLContextClientVersion(2);
         mEffectView.setRenderer(this);
         mEffectView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-        mCurrentEffect = R.id.none;
+        mCurrentEffect = 0;
 
 
 
@@ -88,8 +88,8 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
                 new RecyclerItemClickListener(context, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
                         TextView textView = (TextView) view.findViewById(R.id.itemText);
-                        Log.d("lele",textView.getText().toString() + "text");
-//                          setCurrentEffect(item.getItemId());
+                        Log.d("lele",textView.getText().toString());
+                          setCurrentEffect(effectCollection.getEffect(position).id);
                           mEffectView.requestRender();
                     }
                 })
@@ -159,136 +159,136 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
          */
         switch (mCurrentEffect) {
 
-            case R.id.none:
+            case 0:
                 break;
 
-            case R.id.autofix:
+            case 1:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_AUTOFIX);
                 mEffect.setParameter("scale", 0.5f);
                 break;
 
-            case R.id.bw:
+            case 2:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_BLACKWHITE);
                 mEffect.setParameter("black", .1f);
                 mEffect.setParameter("white", .7f);
                 break;
 
-            case R.id.brightness:
+            case 3:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_BRIGHTNESS);
                 mEffect.setParameter("brightness", 2.0f);
                 break;
 
-            case R.id.contrast:
+            case 4:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_CONTRAST);
                 mEffect.setParameter("contrast", 1.4f);
                 break;
 
-            case R.id.crossprocess:
+            case 5:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_CROSSPROCESS);
                 break;
 
-            case R.id.documentary:
+            case 6:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_DOCUMENTARY);
                 break;
 
-            case R.id.duotone:
+            case 7:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_DUOTONE);
                 mEffect.setParameter("first_color", Color.YELLOW);
                 mEffect.setParameter("second_color", Color.DKGRAY);
                 break;
 
-            case R.id.filllight:
+            case 8:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_FILLLIGHT);
                 mEffect.setParameter("strength", .8f);
                 break;
 
-            case R.id.fisheye:
+            case 9:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_FISHEYE);
                 mEffect.setParameter("scale", .5f);
                 break;
 
-            case R.id.flipvert:
+            case 10:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_FLIP);
                 mEffect.setParameter("vertical", true);
                 break;
 
-            case R.id.fliphor:
+            case 11:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_FLIP);
                 mEffect.setParameter("horizontal", true);
                 break;
 
-            case R.id.grain:
+            case 12:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_GRAIN);
                 mEffect.setParameter("strength", 1.0f);
                 break;
 
-            case R.id.grayscale:
+            case 13:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_GRAYSCALE);
                 break;
 
-            case R.id.lomoish:
+            case 14:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_LOMOISH);
                 break;
 
-            case R.id.negative:
+            case 15:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_NEGATIVE);
                 break;
 
-            case R.id.posterize:
+            case 16:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_POSTERIZE);
                 break;
 
-            case R.id.rotate:
+            case 17:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_ROTATE);
                 mEffect.setParameter("angle", 180);
                 break;
 
-            case R.id.saturate:
+            case 18:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_SATURATE);
                 mEffect.setParameter("scale", .5f);
                 break;
 
-            case R.id.sepia:
+            case 19:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_SEPIA);
                 break;
 
-            case R.id.sharpen:
+            case 20:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_SHARPEN);
                 break;
 
-            case R.id.temperature:
+            case 21:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_TEMPERATURE);
                 mEffect.setParameter("scale", .9f);
                 break;
 
-            case R.id.tint:
+            case 22:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_TINT);
                 mEffect.setParameter("tint", Color.MAGENTA);
                 break;
 
-            case R.id.vignette:
+            case 23:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_VIGNETTE);
                 mEffect.setParameter("scale", .5f);
@@ -304,7 +304,7 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
     }
 
     private void renderResult() {
-        if (mCurrentEffect != R.id.none) {
+        if (mCurrentEffect != 0) {
             // if no effect is chosen, just render the original bitmap
             mTexRenderer.renderTexture(mTextures[1]);
         }
@@ -335,7 +335,7 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
             loadTextures();
             mInitialized = true;
         }
-        if (mCurrentEffect != R.id.none) {
+        if (mCurrentEffect != 0) {
             //if an effect is chosen initialize it and apply it to the texture
             initEffect();
             applyEffect();
