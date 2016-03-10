@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2012 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -42,30 +41,30 @@
     <string name="vignette">Vignette</string>
 
     <!--<string-array name="effects">-->
-        <!--<item>None</item>-->
-        <!--<item>Autofix</item>-->
-        <!--<item>Min/Max Color Intensity</item>-->
-        <!--<item>Brightness</item>-->
-        <!--<item>Contrast</item>-->
-        <!--<item>Cross Process</item>-->
-        <!--<item>Documentary</item>-->
-        <!--<item>Duo Tone</item>-->
-        <!--<item>Fill Light</item>-->
-        <!--<item>Fish Eye</item>-->
-        <!--<item>Flip Vertical</item>-->
-        <!--<item>Flip Horizontal</item>-->
-        <!--<item>Grain</item>-->
-        <!--<item>Grayscale</item>-->
-        <!--<item>Lomoish</item>-->
-        <!--<item>Negative</item>-->
-        <!--<item>Posterize</item>-->
-        <!--<item>Rotate</item>-->
-        <!--<item>Saturate</item>-->
-        <!--<item>Sepia</item>-->
-        <!--<item>Sharpen</item>-->
-        <!--<item>Temperature</item>-->
-        <!--<item>Tint</item>-->
-        <!--<item>Vignette</item>-->
+    <!--<item>None</item>-->
+    <!--<item>Autofix</item>-->
+    <!--<item>Min/Max Color Intensity</item>-->
+    <!--<item>Brightness</item>-->
+    <!--<item>Contrast</item>-->
+    <!--<item>Cross Process</item>-->
+    <!--<item>Documentary</item>-->
+    <!--<item>Duo Tone</item>-->
+    <!--<item>Fill Light</item>-->
+    <!--<item>Fish Eye</item>-->
+    <!--<item>Flip Vertical</item>-->
+    <!--<item>Flip Horizontal</item>-->
+    <!--<item>Grain</item>-->
+    <!--<item>Grayscale</item>-->
+    <!--<item>Lomoish</item>-->
+    <!--<item>Negative</item>-->
+    <!--<item>Posterize</item>-->
+    <!--<item>Rotate</item>-->
+    <!--<item>Saturate</item>-->
+    <!--<item>Sepia</item>-->
+    <!--<item>Sharpen</item>-->
+    <!--<item>Temperature</item>-->
+    <!--<item>Tint</item>-->
+    <!--<item>Vignette</item>-->
     <!--</string-array>-->
 
 </resources>

@@ -16,6 +16,7 @@ public class EffectCollection {
         Collection.add(new Effect(2,"Min/Max Color Intensity"));
         Collection.add(new Effect(3,"Brightness"));
         Collection.add(new Effect(4,"Contrast"));
+        Collection.add(new Effect(24, "Crop"));
         Collection.add(new Effect(5,"Cross Process"));
         Collection.add(new Effect(6,"Documentary"));
         Collection.add(new Effect(7,"Duo Tone"));

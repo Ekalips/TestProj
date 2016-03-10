@@ -4,10 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.djqrj.allah.EditorActivity">
+
     <android.opengl.GLSurfaceView
         android:id="@+id/effectsview"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"/>
+        android:layout_height="wrap_content"
+        />
 
     <ImageButton
         android:layout_width="30dp"
@@ -25,8 +27,17 @@
         android:id="@+id/recyclerView"
         android:background="#B3000000"
         android:layout_alignParentBottom="true"
-        android:layout_alignEnd="@+id/menuBtn"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/imageView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
 
