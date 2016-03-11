@@ -3,6 +3,7 @@ package com.example.djqrj.allah;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.effect.Effect;
 import android.media.effect.EffectContext;
@@ -12,29 +13,32 @@ import android.opengl.GLES20;
 import android.opengl.GLException;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
-import android.os.Environment;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.IntBuffer;
-import java.util.Calendar;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -55,8 +59,14 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
     private TextureRenderer mTexRenderer = new TextureRenderer();
     private int mImageWidth;
     private int mImageHeight;
+    public int bitmapX;
+    float autofixScale = 0.5f;
+    ImageView imageView;
     private boolean mInitialized = false;
     int mCurrentEffect;
+    public int mImageViewHeight,mImageViewWidth;
+    List<EffectCollection.Effect> effectsList = new ArrayList<>();
+    TextView textIndicator;
     Uri uri;
     EffectCollection effectCollection = new EffectCollection();
     public void setCurrentEffect(int effect) {
@@ -68,30 +78,39 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
         context = this;
-        imageButton = (ImageButton) findViewById(R.id.menuBtn);
         uri = Uri.parse(getIntent().getStringExtra("urilol"));
+        textIndicator = (TextView) findViewById(R.id.textView);
+
+
         mEffectView = (GLSurfaceView) findViewById(R.id.effectsview);
+        mEffectView.setVisibility(View.INVISIBLE);
         mEffectView.setEGLContextClientVersion(2);
         mEffectView.setRenderer(this);
         mEffectView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         mCurrentEffect = 0;
 
+        Bitmap bitmap = null;
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ((ImageView)findViewById(R.id.imageView)).setImageBitmap(bitmap);
 
 
-        final ImageButton imageButton = (ImageButton) findViewById(R.id.menuBtn);
+        final ImageView imageButton = (ImageView) findViewById(R.id.menuBtn);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopup(v);
+                mCurrentEffect = 24;
+                mEffectView.requestRender();
             }
         });
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
+        final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
         recyclerView.setLayoutManager(layoutManager);
-
-
 
 
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(effectCollection);
@@ -101,21 +120,92 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
                     @Override public void onItemClick(View view, int position) {
                         TextView textView = (TextView) view.findViewById(R.id.itemText);
                         Log.d("lele",textView.getText().toString());
-                          setCurrentEffect(effectCollection.getEffect(position).id);
-                          mEffectView.requestRender();
+                        effectsList.add(effectCollection.getEffect(position));
+                        //textIndicator.setText(effectsList.size());
+                        switch (position)
+                        {
+                            case 1:
+                                recyclerView.animate().translationY(recyclerView.getHeight()).start();
+                                LinearLayout linearLayout = (LinearLayout) findViewById(R.id.seekBarLay);
+                                SeekBar bar = new SeekBar(context);
+                                bar.setProgress(50);
+                                bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                                    @Override
+                                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                                    }
+
+                                    @Override
+                                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                                    }
+
+                                    @Override
+                                    public void onStopTrackingTouch(SeekBar seekBar) {
+                                        autofixScale = seekBar.getProgress()/100;
+                                        mEffectView.requestRender();
+                                    }
+                                });
+                                linearLayout.addView(bar, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                                linearLayout.animate().translationY(-200).start();
+                        }
+
+
+                        setCurrentEffect(effectCollection.getEffect(position).id);
+                        mEffectView.requestRender();
                     }
                 })
         );
 
 
 
-//        attacher = new PhotoViewAttacher(mEffectView);
-//        attacher.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
-//            @Override
-//            public void onPhotoTap(View view, float x, float y) {
-//
-//            }
-//        });
+    }
+
+
+    public void Save(GL10 gl)
+    {
+
+        final Bitmap finalInBitmap = createBitmapFromGLSurface(0,0,mImageViewWidth,mImageViewHeight,gl);
+
+        try {
+            //Write file
+            String filename = "bitmap.png";
+            FileOutputStream stream = this.openFileOutput(filename, Context.MODE_PRIVATE);
+            finalInBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
+            //Cleanup
+            stream.close();
+            finalInBitmap.recycle();
+
+            //Pop intent
+            Intent in1 = new Intent(this, CropActivity.class);
+            in1.putExtra("image", filename);
+            startActivityForResult(in1,2);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        mCurrentEffect = 0;
+    }
+
+    public void onWindowFocusChanged(boolean hasFocus) {
+        // TODO Auto-generated method stub
+        super.onWindowFocusChanged(hasFocus);
+
+        ImageView img = (ImageView) findViewById(R.id.imageView);
+        mImageViewHeight = img.getHeight();
+        mImageViewWidth = img.getWidth();
+//        Log.d("imagesRenderH1", "height : " + mEffectView.getHeight());
+
+       // ViewGroup.LayoutParams layoutParams=mEffectView.getLayoutParams();
+       // layoutParams.width=(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mImageViewWidth, getResources().getDisplayMetrics());;
+       // layoutParams.height=(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mImageViewHeight, getResources().getDisplayMetrics());;
+
+       // mEffectView.setLayoutParams(layoutParams);
+
+        Log.d("images", "height : " + img.getHeight());
+        mEffectView.setVisibility(View.VISIBLE);
+        Log.d("imagesRenderH2", "height : " + mEffectView.getHeight());
 
 
     }
@@ -129,8 +219,7 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                setCurrentEffect(item.getItemId());
-                mEffectView.requestRender();
+
                 return true;
             }
         });
@@ -151,7 +240,17 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
 
         mImageWidth = bitmap.getWidth();
         mImageHeight = bitmap.getHeight();
+//        imageView = (ImageView) findViewById(R.id.imageView);
+//        final Bitmap finalBitmap = bitmap;
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                imageView.setImageBitmap(finalBitmap);
+//        }
+//        });
+
         mTexRenderer.updateTextureSize(mImageWidth, mImageHeight);
+//        mTexRenderer.updateViewSize(mImageViewWidth,mImageViewHeight);
 
         // Upload to texture
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextures[0]);
@@ -177,7 +276,7 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
             case 1:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_AUTOFIX);
-                mEffect.setParameter("scale", 0.5f);
+                mEffect.setParameter("scale", autofixScale);
                 break;
 
             case 2:
@@ -331,7 +430,7 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-
+        Log.d("lol","no");
     }
 
     @Override
@@ -359,72 +458,12 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
 
         if (mCurrentEffect == 24)
         {
-          //  Intent intent = new Intent(this, CropActivity.class);
-          //  startActivityForResult(intent,1);
-
-//            final Bitmap bitmap = takeScreenshot(gl);
-//            this.runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    imageButton.setImageBitmap(bitmap);
-//                }
-//            });
-
-
-            try {
-                int w = mImageWidth ;
-                int h = mImageHeight  ;
-
-                Log.i("hari", "w:"+w+"-----h:"+h);
-
-                int b[]=new int[(int) (w*h)];
-                int bt[]=new int[(int) (w*h)];
-                IntBuffer buffer=IntBuffer.wrap(b);
-                buffer.position(0);
-                GLES20.glReadPixels(0, 0, w, h,GLES20.GL_RGBA,GLES20.GL_UNSIGNED_BYTE, buffer);
-                for(int i=0; i<h; i++)
-                {
-                    //remember, that OpenGL bitmap is incompatible with Android bitmap
-                    //and so, some correction need.
-                    for(int j=0; j<w; j++)
-                    {
-                        int pix=b[i*w+j];
-                        int pb=(pix>>16)&0xff;
-                        int pr=(pix<<16)&0x00ff0000;
-                        int pix1=(pix&0xff00ff00) | pr | pb;
-                        bt[(h-i-1)*w+j]=pix1;
-                    }
-                }
-                Bitmap inBitmap = null ;
-                if (inBitmap == null || !inBitmap.isMutable()
-                        || inBitmap.getWidth() != w || inBitmap.getHeight() != h) {
-                    inBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-                }
-                //Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-                inBitmap.copyPixelsFromBuffer(buffer);
-                //return inBitmap ;
-                // return Bitmap.createBitmap(bt, w, h, Bitmap.Config.ARGB_8888);
-                inBitmap = Bitmap.createBitmap(bt, w, h, Bitmap.Config.ARGB_8888);
-
-               // ByteArrayOutputStream bos = new ByteArrayOutputStream();
-               // inBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bos);
-
-                final ImageView imageView = (ImageView) findViewById(R.id.imageView);
-                final Bitmap finalInBitmap = inBitmap;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        imageView.setImageBitmap(finalInBitmap);
-                    }
-                });
-
-
-            }
-        catch(Exception e) {
-            e.printStackTrace() ;
-        }
+            Save(gl);
         }
     }
+
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -434,25 +473,31 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
     }
 
 
-    public Bitmap takeScreenshot(GL10 mGL) {
-        final int mWidth = mEffectView.getWidth();
-        final int mHeight = mEffectView.getHeight();
-        IntBuffer ib = IntBuffer.allocate(mWidth * mHeight);
-        IntBuffer ibt = IntBuffer.allocate(mWidth * mHeight);
+    private Bitmap createBitmapFromGLSurface(int x, int y, int w, int h, GL10 gl)
+            throws OutOfMemoryError {
+        int bitmapBuffer[] = new int[w * h];
+        int bitmapSource[] = new int[w * h];
+        IntBuffer intBuffer = IntBuffer.wrap(bitmapBuffer);
+        intBuffer.position(0);
 
-
-        mGL.glReadPixels(0, 0, mWidth, mHeight, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, ib);
-
-        // Convert upside down mirror-reversed image to right-side up normal
-        // image.
-        for (int i = 0; i < mHeight; i++) {
-            for (int j = 0; j < mWidth; j++) {
-                ibt.put((mHeight - i - 1) * mWidth + j, ib.get(i * mWidth + j));
+        try {
+            gl.glReadPixels(0, 0, w, h, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, intBuffer);
+            int offset1, offset2;
+            for (int i = 0; i < h; i++) {
+                offset1 = i * w;
+                offset2 = (h - i - 1) * w;
+                for (int j = 0; j < w; j++) {
+                    int texturePixel = bitmapBuffer[offset1 + j];
+                    int blue = (texturePixel >> 16) & 0xff;
+                    int red = (texturePixel << 16) & 0x00ff0000;
+                    int pixel = (texturePixel & 0xff00ff00) | red | blue;
+                    bitmapSource[offset2 + j] = pixel;
+                }
             }
+        } catch (GLException e) {
+            return null;
         }
 
-        Bitmap mBitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
-        mBitmap.copyPixelsFromBuffer(ibt);
-        return mBitmap;
+        return Bitmap.createBitmap(bitmapSource, w, h, Bitmap.Config.ARGB_8888);
     }
 }

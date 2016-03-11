@@ -32,11 +32,11 @@ public class TextureRenderer {
     private FloatBuffer mTexVertices;
     private FloatBuffer mPosVertices;
 
-    private int mViewWidth;
-    private int mViewHeight;
+    public int mViewWidth;
+    public int mViewHeight;
 
-    private int mTexWidth;
-    private int mTexHeight;
+    public int mTexWidth;
+    public int mTexHeight;
 
     private static final String VERTEX_SHADER =
             "attribute vec4 a_position;\n" +
