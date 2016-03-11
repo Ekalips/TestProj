@@ -335,6 +335,7 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
         ImageView img = (ImageView) findViewById(R.id.imageView);
         mImageViewHeight = img.getHeight();
         mImageViewWidth = img.getWidth();
+
 //     Log.d("imagesRenderH1", "height : " + mEffectView.getHeight());
 
        // ViewGroup.LayoutParams layoutParams=mEffectView.getLayoutParams();
@@ -574,17 +575,19 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
             mTexRenderer.init();
             loadTextures();
             mInitialized = true;
+            setCurrentEffect(0);
+            mEffectView.requestRender();
         }
         if (mCurrentEffect != 0 && mCurrentEffect != 24) {
             //if an effect is chosen initialize it and apply it to the texture
             initEffect();
             applyEffect();
         }
-        renderResult();
         if (mCurrentEffect == 24)
         {
             Save(gl);
         }
+        renderResult();
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
