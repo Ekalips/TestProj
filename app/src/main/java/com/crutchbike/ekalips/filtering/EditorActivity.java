@@ -59,6 +59,7 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
     int ColorBar = Color.MAGENTA;
     int ColorBar2 = Color.YELLOW;
     ImageView imageView;
+    int SeecBar = 90;
     private boolean mInitialized = false;
     int mCurrentEffect;
     public int mImageViewHeight,mImageViewWidth;
@@ -77,8 +78,6 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
         setContentView(R.layout.activity_editor);
         context = this;
         uri = Uri.parse(getIntent().getStringExtra("urilol"));
-        textIndicator = (TextView) findViewById(R.id.textView);
-
 
         mEffectView = (GLSurfaceView) findViewById(R.id.effectsview);
         mEffectView.setVisibility(View.INVISIBLE);
@@ -124,7 +123,6 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
                                 position==8 ||
                                 position==9 ||
                                 position==12 ||
-                                position==17 ||
                                 position==18 ||
                                 position==21 ||
                                 position==23
@@ -285,6 +283,7 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
                                 });
                                 linearLayout.addView(bar2);
                             }
+
                         setCurrentEffect(effectCollection.getEffect(position).id);
                         mEffectView.requestRender();
                     }
@@ -485,7 +484,7 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
             case 17:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_ROTATE);
-                mEffect.setParameter("angle", ScaleBar);
+                mEffect.setParameter("angle", 180);
                 break;
 
             case 18:
