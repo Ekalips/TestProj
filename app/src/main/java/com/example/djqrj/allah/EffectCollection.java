@@ -38,21 +38,17 @@ public class EffectCollection {
         Collection.add(new Effect(23,"Vignette"));
     }
 
-    public Effect[] toArray()
-    {
-        Effect[] asd = new Effect[Collection.size()];
+    public Effect[] toArray()    {
+        Effect[] e = new Effect[Collection.size()];
         for (int i=0;i<Collection.size();i++)
-        {
-            asd[i] = Collection.get(i);
-        }
-        return asd;
+            e[i] = Collection.get(i);
+        return e;
     }
     public Effect[] getArray(){return toArray();}
     public Effect getEffect(int i) {return Collection.get(i);}
     public class Effect {
         int id;
         String name;
-
         public Effect(int id, String name) {
             this.id = id;
             this.name = name;

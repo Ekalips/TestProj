@@ -60,7 +60,7 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
     private int mImageWidth;
     private int mImageHeight;
     public int bitmapX;
-    float autofixScale = 0.5f;
+    float ScaleBar = 0.5f;
     ImageView imageView;
     private boolean mInitialized = false;
     int mCurrentEffect;
@@ -96,8 +96,6 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
             e.printStackTrace();
         }
         ((ImageView)findViewById(R.id.imageView)).setImageBitmap(bitmap);
-
-
         final ImageView imageButton = (ImageView) findViewById(R.id.menuBtn);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,54 +117,58 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
                 new RecyclerItemClickListener(context, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
                         TextView textView = (TextView) view.findViewById(R.id.itemText);
-                        Log.d("lele",textView.getText().toString());
+                        Log.d("lele", new Integer(position).toString());
                         effectsList.add(effectCollection.getEffect(position));
                         //textIndicator.setText(effectsList.size());
-                        switch (position)
-                        {
-                            case 1:
+                            if( position==1 ||
+                                position==2 ||
+                                position==3 ||
+                                position==4 ||
+                                position==8 ||
+                                position==9 ||
+                                position==12 ||
+                                position==17 ||
+                                position==18 ||
+                                position==21 ||
+                                position==23
+                            ){
                                 recyclerView.animate().translationY(recyclerView.getHeight()).start();
                                 LinearLayout linearLayout = (LinearLayout) findViewById(R.id.seekBarLay);
                                 SeekBar bar = new SeekBar(context);
                                 bar.setProgress(50);
                                 bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                                  //  int pro = 50;
                                     @Override
-                                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){}
 
+                                    @Override
+                                    public void onStartTrackingTouch(SeekBar seekBar){
+                                        //seekBar.setProgress(pro);
                                     }
-
                                     @Override
-                                    public void onStartTrackingTouch(SeekBar seekBar) {
+                                    public void onStopTrackingTouch(SeekBar seekBar){
+                                     //   pro = seekBar.getProgress();
 
-                                    }
-
-                                    @Override
-                                    public void onStopTrackingTouch(SeekBar seekBar) {
-                                        autofixScale = seekBar.getProgress()/100;
+                                        ScaleBar = ((float)seekBar.getProgress()/100f);
+                                        Log.d("lele", new Float(ScaleBar).toString());
+                                        Log.d("hehe", new Integer(seekBar.getProgress()).toString());
                                         mEffectView.requestRender();
                                     }
                                 });
                                 linearLayout.addView(bar, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                                 linearLayout.animate().translationY(-200).start();
-                        }
-
-
+                            }
                         setCurrentEffect(effectCollection.getEffect(position).id);
                         mEffectView.requestRender();
                     }
                 })
         );
-
-
-
     }
 
 
     public void Save(GL10 gl)
     {
-
         final Bitmap finalInBitmap = createBitmapFromGLSurface(0,0,mImageViewWidth,mImageViewHeight,gl);
-
         try {
             //Write file
             String filename = "bitmap.png";
@@ -189,13 +191,12 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
     }
 
     public void onWindowFocusChanged(boolean hasFocus) {
-        // TODO Auto-generated method stub
         super.onWindowFocusChanged(hasFocus);
 
         ImageView img = (ImageView) findViewById(R.id.imageView);
         mImageViewHeight = img.getHeight();
         mImageViewWidth = img.getWidth();
-//        Log.d("imagesRenderH1", "height : " + mEffectView.getHeight());
+//     Log.d("imagesRenderH1", "height : " + mEffectView.getHeight());
 
        // ViewGroup.LayoutParams layoutParams=mEffectView.getLayoutParams();
        // layoutParams.width=(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mImageViewWidth, getResources().getDisplayMetrics());;
@@ -206,12 +207,7 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
         Log.d("images", "height : " + img.getHeight());
         mEffectView.setVisibility(View.VISIBLE);
         Log.d("imagesRenderH2", "height : " + mEffectView.getHeight());
-
-
     }
-
-
-
     public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();
@@ -219,13 +215,11 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-
                 return true;
             }
         });
         popup.show();
     }
-
     private void loadTextures() {
         // Generate textures
         GLES20.glGenTextures(2, mTextures, 0);
@@ -251,7 +245,6 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
 
         mTexRenderer.updateTextureSize(mImageWidth, mImageHeight);
 //        mTexRenderer.updateViewSize(mImageViewWidth,mImageViewHeight);
-
         // Upload to texture
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextures[0]);
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
@@ -269,33 +262,29 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
          * Initialize the correct effect based on the selected menu/action item
          */
         switch (mCurrentEffect) {
-
             case 0:
                 break;
-
             case 1:
-                mEffect = effectFactory.createEffect(
-                        EffectFactory.EFFECT_AUTOFIX);
-                mEffect.setParameter("scale", autofixScale);
+                mEffect = effectFactory.createEffect(EffectFactory.EFFECT_AUTOFIX);
+                mEffect.setParameter("scale", ScaleBar);
                 break;
 
             case 2:
-                mEffect = effectFactory.createEffect(
-                        EffectFactory.EFFECT_BLACKWHITE);
+                mEffect = effectFactory.createEffect(EffectFactory.EFFECT_BLACKWHITE);
                 mEffect.setParameter("black", .1f);
-                mEffect.setParameter("white", .7f);
+                mEffect.setParameter("white", ScaleBar);
                 break;
 
             case 3:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_BRIGHTNESS);
-                mEffect.setParameter("brightness", 2.0f);
+                mEffect.setParameter("brightness", ScaleBar*2f);
                 break;
 
             case 4:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_CONTRAST);
-                mEffect.setParameter("contrast", 1.4f);
+                mEffect.setParameter("contrast", ScaleBar*1.5f);
                 break;
 
             case 5:
@@ -318,13 +307,13 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
             case 8:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_FILLLIGHT);
-                mEffect.setParameter("strength", .8f);
+                mEffect.setParameter("strength", ScaleBar);
                 break;
 
             case 9:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_FISHEYE);
-                mEffect.setParameter("scale", .5f);
+                mEffect.setParameter("scale", ScaleBar);
                 break;
 
             case 10:
@@ -342,7 +331,7 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
             case 12:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_GRAIN);
-                mEffect.setParameter("strength", 1.0f);
+                mEffect.setParameter("strength", ScaleBar);
                 break;
 
             case 13:
@@ -374,7 +363,7 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
             case 18:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_SATURATE);
-                mEffect.setParameter("scale", .5f);
+                mEffect.setParameter("scale", ScaleBar);
                 break;
 
             case 19:
@@ -390,7 +379,7 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
             case 21:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_TEMPERATURE);
-                mEffect.setParameter("scale", .9f);
+                mEffect.setParameter("scale", ScaleBar);
                 break;
 
             case 22:
@@ -402,12 +391,10 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
             case 23:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_VIGNETTE);
-                mEffect.setParameter("scale", .5f);
+                mEffect.setParameter("scale", ScaleBar);
                 break;
 
             case 24:
-
-
             default:
                 break;
 
@@ -455,31 +442,23 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
             applyEffect();
         }
         renderResult();
-
         if (mCurrentEffect == 24)
         {
             Save(gl);
         }
     }
-
-
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         setCurrentEffect(item.getItemId());
         mEffectView.requestRender();
         return true;
     }
-
-
     private Bitmap createBitmapFromGLSurface(int x, int y, int w, int h, GL10 gl)
             throws OutOfMemoryError {
         int bitmapBuffer[] = new int[w * h];
         int bitmapSource[] = new int[w * h];
         IntBuffer intBuffer = IntBuffer.wrap(bitmapBuffer);
         intBuffer.position(0);
-
         try {
             gl.glReadPixels(0, 0, w, h, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, intBuffer);
             int offset1, offset2;
@@ -497,7 +476,6 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
         } catch (GLException e) {
             return null;
         }
-
         return Bitmap.createBitmap(bitmapSource, w, h, Bitmap.Config.ARGB_8888);
     }
 }
