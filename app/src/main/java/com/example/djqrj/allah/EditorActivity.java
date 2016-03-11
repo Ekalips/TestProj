@@ -5,6 +5,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.media.effect.Effect;
 import android.media.effect.EffectContext;
 import android.media.effect.EffectFactory;
@@ -39,6 +44,7 @@ import java.io.IOException;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -61,6 +67,9 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
     private int mImageHeight;
     public int bitmapX;
     float ScaleBar = 0.5f;
+    private float ScaleBar2 = 0.5f;
+    int ColorBar = Color.MAGENTA;
+    int ColorBar2 = Color.YELLOW;
     ImageView imageView;
     private boolean mInitialized = false;
     int mCurrentEffect;
@@ -69,6 +78,7 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
     TextView textIndicator;
     Uri uri;
     EffectCollection effectCollection = new EffectCollection();
+
     public void setCurrentEffect(int effect) {
         mCurrentEffect = effect;
     }
@@ -121,7 +131,6 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
                         effectsList.add(effectCollection.getEffect(position));
                         //textIndicator.setText(effectsList.size());
                             if( position==1 ||
-                                position==2 ||
                                 position==3 ||
                                 position==4 ||
                                 position==8 ||
@@ -132,9 +141,12 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
                                 position==21 ||
                                 position==23
                             ){
+                                Log.d("lele", "COMON");
                                 recyclerView.animate().translationY(recyclerView.getHeight()).start();
                                 LinearLayout linearLayout = (LinearLayout) findViewById(R.id.seekBarLay);
+                                linearLayout.setPadding(0, 0, 0, 26);
                                 SeekBar bar = new SeekBar(context);
+                                bar.setVisibility(View.VISIBLE);
                                 bar.setProgress(50);
                                 bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                                   //  int pro = 50;
@@ -150,13 +162,140 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
                                      //   pro = seekBar.getProgress();
 
                                         ScaleBar = ((float)seekBar.getProgress()/100f);
-                                        Log.d("lele", new Float(ScaleBar).toString());
-                                        Log.d("hehe", new Integer(seekBar.getProgress()).toString());
                                         mEffectView.requestRender();
                                     }
                                 });
-                                linearLayout.addView(bar, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                                linearLayout.animate().translationY(-200).start();
+                                linearLayout.addView(bar);
+                               // linearLayout.animate().translationY(-200).start();
+                            }
+                        else if (position == 22)
+                            {
+                                recyclerView.animate().translationY(recyclerView.getHeight()).start();
+                                LinearLayout linearLayout = (LinearLayout) findViewById(R.id.seekBarLay);
+                                linearLayout.setPadding(0, 0, 0, 26);
+                                ColorPickerSeekBar bar = new ColorPickerSeekBar(context);
+                                bar.setVisibility(View.VISIBLE);
+                                bar.setProgress(50);
+                                bar.setOnColorSeekbarChangeListener(new ColorPickerSeekBar.OnColorSeekBarChangeListener() {
+                                    @Override
+                                    public void onColorChanged(SeekBar seekBar, int color, boolean b) {
+                                        ColorBar = color;
+                                        mEffectView.requestRender();
+                                    }
+
+                                    @Override
+                                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                                    }
+
+                                    @Override
+                                    public void onStopTrackingTouch(SeekBar seekBar) {
+
+                                    }
+                                });
+                                linearLayout.addView(bar);
+                            }
+                        else if (position == 2)
+                            {
+                                recyclerView.animate().translationY(recyclerView.getHeight()).start();
+                                LinearLayout linearLayout = (LinearLayout) findViewById(R.id.seekBarLay);
+                                linearLayout.setPadding(0, 0, 0, 26);
+                                SeekBar bar = new SeekBar(context);
+                                bar.setVisibility(View.VISIBLE);
+                                bar.setProgress(70);
+                                ScaleBar = ((float)bar.getProgress()/100f);
+                                bar.setPadding(bar.getPaddingLeft(),bar.getPaddingTop(),bar.getPaddingRight(),20);
+                                bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                                    //  int pro = 50;
+                                    @Override
+                                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){}
+
+                                    @Override
+                                    public void onStartTrackingTouch(SeekBar seekBar){
+                                        //seekBar.setProgress(pro);
+                                    }
+                                    @Override
+                                    public void onStopTrackingTouch(SeekBar seekBar){
+                                        //   pro = seekBar.getProgress();
+
+                                        ScaleBar = ((float)seekBar.getProgress()/100f);
+                                        mEffectView.requestRender();
+                                    }
+                                });
+                                linearLayout.addView(bar);
+
+                                SeekBar bar2 = new SeekBar(context);
+                                bar2.setVisibility(View.VISIBLE);
+                                bar2.setProgress(10);
+                                ScaleBar2 = ((float)bar2.getProgress()/100f);
+                                bar2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                                    //  int pro = 50;
+                                    @Override
+                                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){}
+
+                                    @Override
+                                    public void onStartTrackingTouch(SeekBar seekBar){
+                                        //seekBar.setProgress(pro);
+                                    }
+                                    @Override
+                                    public void onStopTrackingTouch(SeekBar seekBar){
+                                        //   pro = seekBar.getProgress();
+
+                                        ScaleBar2 = ((float)seekBar.getProgress()/100f);
+                                        mEffectView.requestRender();
+                                    }
+                                });
+                                linearLayout.addView(bar2);
+                            }
+                        else if (position == 7)
+                            {
+                                recyclerView.animate().translationY(recyclerView.getHeight()).start();
+                                LinearLayout linearLayout = (LinearLayout) findViewById(R.id.seekBarLay);
+                                linearLayout.setPadding(0, 0, 0, 26);
+                                ColorPickerSeekBar bar = new ColorPickerSeekBar(context);
+                                bar.setVisibility(View.VISIBLE);
+                                bar.setProgress(70);
+                                bar.setPadding(bar.getPaddingLeft(),bar.getPaddingTop(),bar.getPaddingRight(),20);
+                                bar.setOnColorSeekbarChangeListener(new ColorPickerSeekBar.OnColorSeekBarChangeListener() {
+                                    @Override
+                                    public void onColorChanged(SeekBar seekBar, int color, boolean b) {
+                                        ColorBar = color;
+                                        mEffectView.requestRender();
+                                    }
+
+                                    @Override
+                                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                                    }
+
+                                    @Override
+                                    public void onStopTrackingTouch(SeekBar seekBar) {
+
+                                    }
+                                });
+                                linearLayout.addView(bar);
+
+                                ColorPickerSeekBar bar2 = new ColorPickerSeekBar(context);
+                                bar2.setVisibility(View.VISIBLE);
+                                bar2.setProgress(20);
+                                bar2.setOnColorSeekbarChangeListener(new ColorPickerSeekBar.OnColorSeekBarChangeListener() {
+                                    @Override
+                                    public void onColorChanged(SeekBar seekBar, int color, boolean b) {
+                                        ColorBar2 = color;
+                                        mEffectView.requestRender();
+                                    }
+
+                                    @Override
+                                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                                    }
+
+                                    @Override
+                                    public void onStopTrackingTouch(SeekBar seekBar) {
+
+                                    }
+                                });
+                                linearLayout.addView(bar2);
                             }
                         setCurrentEffect(effectCollection.getEffect(position).id);
                         mEffectView.requestRender();
@@ -271,7 +410,7 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
 
             case 2:
                 mEffect = effectFactory.createEffect(EffectFactory.EFFECT_BLACKWHITE);
-                mEffect.setParameter("black", .1f);
+                mEffect.setParameter("black", ScaleBar2);
                 mEffect.setParameter("white", ScaleBar);
                 break;
 
@@ -300,8 +439,8 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
             case 7:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_DUOTONE);
-                mEffect.setParameter("first_color", Color.YELLOW);
-                mEffect.setParameter("second_color", Color.DKGRAY);
+                mEffect.setParameter("first_color", ColorBar);
+                mEffect.setParameter("second_color", ColorBar2);
                 break;
 
             case 8:
@@ -357,7 +496,7 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
             case 17:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_ROTATE);
-                mEffect.setParameter("angle", 180);
+                mEffect.setParameter("angle", ScaleBar);
                 break;
 
             case 18:
@@ -385,7 +524,7 @@ public class EditorActivity extends AppCompatActivity implements GLSurfaceView.R
             case 22:
                 mEffect = effectFactory.createEffect(
                         EffectFactory.EFFECT_TINT);
-                mEffect.setParameter("tint", Color.MAGENTA);
+                mEffect.setParameter("tint", ColorBar);
                 break;
 
             case 23:
