@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +30,13 @@ public class StartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start);
         context = this;
         final RelativeLayout lay = (RelativeLayout) findViewById(R.id.mainRelativeLay);
+        ImageView imageView = (ImageView) findViewById(R.id.imageView2);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OpenImageBrowser();
+            }
+        });
         Button btn = (Button) findViewById(R.id.GoBtn);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override

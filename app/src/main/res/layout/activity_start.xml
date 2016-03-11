@@ -6,12 +6,28 @@
     android:id="@+id/mainRelativeLay"
     tools:context="com.example.djqrj.allah.StartActivity">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/initimage"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="GO"
+        android:text="Open photo"
         android:id="@+id/GoBtn"
+        android:textSize="16sp"
+        android:layout_marginBottom="24dp"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/transparent" />
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/imageView2"
+        android:src="@drawable/ic_phone_android_white_24dp"
+        android:layout_above="@+id/GoBtn"
         android:layout_centerHorizontal="true" />
 
 
