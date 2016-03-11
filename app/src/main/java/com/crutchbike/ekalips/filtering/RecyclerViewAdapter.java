@@ -1,6 +1,5 @@
-package com.example.djqrj.allah;
+package com.crutchbike.ekalips.filtering;
 
-import android.support.annotation.StringDef;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;

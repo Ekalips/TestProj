@@ -1,4 +1,4 @@
-package com.example.djqrj.allah.Cropper;
+package com.crutchbike.ekalips.filtering.Cropper;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -7,9 +7,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.example.djqrj.allah.Cropper.*;
-import com.example.djqrj.allah.Cropper.handler.OnBoxChangedListener;
-import com.example.djqrj.allah.Cropper.model.ScalableBox;
+import com.crutchbike.ekalips.filtering.Cropper.handler.OnBoxChangedListener;
+import com.crutchbike.ekalips.filtering.Cropper.model.ScalableBox;
 
 /**
  * box that can be scaled and moved

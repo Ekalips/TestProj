@@ -1,7 +1,6 @@
-package com.example.djqrj.allah;
+package com.crutchbike.ekalips.filtering;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 /**
  * Created by ekalips on 3/8/16.

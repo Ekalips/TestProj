@@ -1,7 +1,6 @@
-package com.example.djqrj.allah;
+package com.crutchbike.ekalips.filtering;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -14,10 +13,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.djqrj.allah.Cropper.EditPhotoView;
-import com.example.djqrj.allah.Cropper.EditableImage;
-import com.example.djqrj.allah.Cropper.handler.OnBoxChangedListener;
-import com.example.djqrj.allah.Cropper.model.ScalableBox;
+import com.crutchbike.ekalips.filtering.Cropper.EditPhotoView;
+import com.crutchbike.ekalips.filtering.Cropper.EditableImage;
+import com.crutchbike.ekalips.filtering.Cropper.handler.OnBoxChangedListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

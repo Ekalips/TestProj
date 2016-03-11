@@ -1,4 +1,4 @@
-package com.example.djqrj.allah.Cropper;
+package com.crutchbike.ekalips.filtering.Cropper;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -7,9 +7,8 @@ import android.util.AttributeSet;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.example.djqrj.allah.Cropper.*;
-import com.example.djqrj.allah.Cropper.handler.OnBoxChangedListener;
-import com.example.djqrj.allah.R;
+import com.crutchbike.ekalips.filtering.Cropper.handler.OnBoxChangedListener;
+import com.crutchbike.ekalips.filtering.R;
 
 /**
  * Created by yulu on 12/3/15.

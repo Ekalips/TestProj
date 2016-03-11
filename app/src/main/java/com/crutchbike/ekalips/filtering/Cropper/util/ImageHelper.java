@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.example.djqrj.allah.Cropper.util;
+package com.crutchbike.ekalips.filtering.Cropper.util;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;

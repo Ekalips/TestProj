@@ -13,7 +13,7 @@
      limitations under the License.
 -->
 <resources>
-    <string name="app_name">HelloEffects</string>
+    <string name="app_name">CrutchBikeFilters</string>
 
     <string name="none">None</string>
     <string name="autofix">Autofix</string>

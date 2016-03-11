@@ -1,4 +1,4 @@
-package com.example.djqrj.allah.Cropper.handler;
+package com.crutchbike.ekalips.filtering.Cropper.handler;
 
 /**
  * Created by visenze on 11/12/15.

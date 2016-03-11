@@ -1,4 +1,4 @@
-package com.example.djqrj.allah;
+package com.crutchbike.ekalips.filtering;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

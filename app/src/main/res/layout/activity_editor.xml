@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/baseLayout"
-    tools:context="com.example.djqrj.allah.EditorActivity">
+    tools:context="com.crutchbike.ekalips.filtering.EditorActivity">
 
 
     <ImageView

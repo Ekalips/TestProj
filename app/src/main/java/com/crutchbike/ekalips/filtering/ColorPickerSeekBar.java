@@ -1,5 +1,5 @@
-package com.example.djqrj.allah; /**
- * Created by djqrj on 3/11/2016.
+package com.crutchbike.ekalips.filtering; /**
+ * Created by ekalips on 3/11/2016.
  */
 import android.content.Context;
 import android.graphics.Color;
@@ -12,10 +12,10 @@ import android.widget.SeekBar;
 
 /**
  * Created by akolluru on 21/08/14.
- * A com.example.djqrj.allah.ColorPickerSeekBar is an extension of SeekBar for choosing a color.
+ * A com.crutchbike.ekalips.filtering.ColorPickerSeekBar is an extension of SeekBar for choosing a color.
  * The user can touch the thumb and drag left or right to set the color.
  *
- * Clients can attach a com.example.djqrj.allah.ColorPickerSeekBar.OnColorSeekBarChangeListener to be notified
+ * Clients can attach a com.crutchbike.ekalips.filtering.ColorPickerSeekBar.OnColorSeekBarChangeListener to be notified
  * of color changes
  */
 public class ColorPickerSeekBar extends SeekBar implements SeekBar.OnSeekBarChangeListener{

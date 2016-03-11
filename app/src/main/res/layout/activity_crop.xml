@@ -8,9 +8,9 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingRight="2dp"
     android:paddingLeft="2dp"
-    tools:context="com.example.djqrj.allah.CropActivity">
+    tools:context="com.crutchbike.ekalips.filtering.CropActivity">
 
-    <com.example.djqrj.allah.Cropper.EditPhotoView
+    <com.crutchbike.ekalips.filtering.Cropper.EditPhotoView
         android:id="@+id/editable_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

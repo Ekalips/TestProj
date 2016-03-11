@@ -1,4 +1,4 @@
-package com.example.djqrj.allah.Cropper.model;
+package com.crutchbike.ekalips.filtering.Cropper.model;
 
 /**
  * box that can be scaled and moved

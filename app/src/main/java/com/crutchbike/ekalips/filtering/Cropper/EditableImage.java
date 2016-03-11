@@ -1,10 +1,10 @@
-package com.example.djqrj.allah.Cropper;
+package com.crutchbike.ekalips.filtering.Cropper;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 
-import com.example.djqrj.allah.Cropper.model.ScalableBox;
-import com.example.djqrj.allah.Cropper.util.ImageHelper;
+import com.crutchbike.ekalips.filtering.Cropper.model.ScalableBox;
+import com.crutchbike.ekalips.filtering.Cropper.util.ImageHelper;
 
 /**
  * Editable image, manage bitmap rotation, calculate fit size and search box size

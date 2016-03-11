@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.djqrj.allah;
+package com.crutchbike.ekalips.filtering;
 
 import android.opengl.GLES20;
 
